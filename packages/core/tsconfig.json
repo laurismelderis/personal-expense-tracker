@@ -1,6 +1,6 @@
 {
   "extends": "@repo/typescript-config/react-native-library.json",
-  "include": ["."],
+  "include": [".", "../../apps/web/constants/routes.ts"],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "strict": true

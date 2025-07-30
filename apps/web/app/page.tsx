@@ -1,14 +1,15 @@
-'use client'
-
-import { Button } from '../../../packages/core/dist'
-
+import Link from 'next/link'
 import styles from '../styles/index.module.css'
+import { ROUTES } from '../constants/routes'
 
-export default function Web() {
+export default function HomePage() {
   return (
     <div className={styles.container}>
-      <h1>Web</h1>
-      <Button onClick={() => console.log('Pressed!')} text="Boop" />
+      <h1>Expense tracker app</h1>
+      <div>
+        <Link href={ROUTES.LOGIN}>Log in</Link>
+        <Link href={ROUTES.REGISTER}>Register</Link>
+      </div>
     </div>
   )
 }
