@@ -14,7 +14,7 @@
     "node": ">=18"
   },
   "name": "with-react-native-web",
-  "packageManager": "npm@10.8.2",
+  "packageManager": "npm@10.9.2",
   "workspaces": [
     "apps/*",
     "packages/*"
