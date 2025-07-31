@@ -1,11 +1,11 @@
 'use client'
 
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
-import { AuthContext, AuthContextType, Button } from '@repo/core'
+import { AuthContext, AuthContextType } from '@repo/core'
 
-import styles from '../../styles/index.module.css'
 import { useRouter } from 'next/navigation'
 import { ROUTES } from '../../constants/routes'
+import { Button } from '../../components/common/Button'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -34,7 +34,7 @@ export default function RegisterPage() {
   }, [user])
 
   return (
-    <div className={styles.container}>
+    <div>
       <h1>Register</h1>
       <div>
         <label>Email</label>
@@ -55,7 +55,7 @@ export default function RegisterPage() {
         />
       </div>
       {error ? <p>{error}</p> : null}
-      <Button onClick={handleRegister} text="Register" />
+      <Button onClick={handleRegister}>Register</Button>
     </div>
   )
 }

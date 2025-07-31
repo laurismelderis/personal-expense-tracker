@@ -1,4 +1,7 @@
 import { AuthProvider } from '@repo/core'
+import './global.css'
+import { Toaster } from '../components/common/Toaster'
+import { TooltipProvider } from '../components/common/Tooltip'
 
 export default function RootLayout({
   children,
@@ -8,7 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            {children}
+          </TooltipProvider>
+        </AuthProvider>
       </body>
     </html>
   )

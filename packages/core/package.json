@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
+    "date-fns": "^4.1.0",
     "react": "19.0.0",
     "react-native": "0.79.5"
   }
