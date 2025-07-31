@@ -1,7 +1,7 @@
 'use client'
 
+import { fetchReceipt } from '@repo/core'
 import { useState, useEffect } from 'react'
-// import { getReceiptSignedUrl } from '@/lib/receipt-utils'
 
 interface ReceiptImageProps {
   receiptPath: string
@@ -21,26 +21,22 @@ export function ReceiptImage({
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
-    // const loadSignedUrl = async () => {
-    //   try {
-    //     const url = await getReceiptSignedUrl(receiptPath)
-    //     if (url) {
-    //       setSignedUrl(url)
-    //     } else {
-    //       setHasError(true)
-    //       onError?.()
-    //     }
-    //   } catch (error) {
-    //     console.error('Error loading receipt URL:', error)
-    //     setHasError(true)
-    //     onError?.()
-    //   } finally {
-    //     setIsLoading(false)
-    //   }
-    // }
+    const loadSignedUrl = async () => {
+      try {
+        const url = await fetchReceipt({ receiptPath })
+        setSignedUrl(url)
+      } catch (error) {
+        setHasError(true)
+        onError?.()
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    console.log({ receiptPath })
 
     if (receiptPath) {
-      // loadSignedUrl()
+      loadSignedUrl()
     }
   }, [receiptPath, onError])
 

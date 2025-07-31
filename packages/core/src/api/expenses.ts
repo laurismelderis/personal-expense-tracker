@@ -14,7 +14,7 @@ export interface Expense {
   description: string
   created_at: string
   date: string
-  receipt_url: string | null
+  receipt_url?: string
   expense_categories: Category
 }
 
@@ -27,10 +27,14 @@ export interface ExpensesSummary {
 
 export const fetchExpenses = async ({
   userId,
+  startDate,
+  endDate,
 }: {
   userId: string
+  startDate?: string
+  endDate?: string
 }): Promise<Expense[]> => {
-  const { data, error } = await supabase
+  let request = supabase
     .from('expenses')
     .select(
       `
@@ -48,12 +52,27 @@ export const fetchExpenses = async ({
       `
     )
     .eq('user_id', userId)
-    .order('date', { ascending: false })
-    .limit(20)
-    .overrideTypes<Expense[]>()
+
+  if (startDate) {
+    request = request.gte('date', startDate)
+  }
+  if (endDate) {
+    request = request.lte('date', endDate)
+  }
+
+  request = request.order('date', { ascending: false })
+
+  const { data, error } = await request
 
   if (data && !error) {
-    return data
+    return data.map((expense) => ({
+      ...expense,
+      expense_categories: {
+        id: (expense.expense_categories as any).id,
+        name: (expense.expense_categories as any).name,
+        icon: (expense.expense_categories as any).icon,
+      },
+    }))
   } else if (error) {
     throw new Error(error.message)
   }

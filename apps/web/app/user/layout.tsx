@@ -1,5 +1,7 @@
 import ProtectedRoute from '../../components/ProtectedRoute'
 
+// export const getServerSideProps = async () => {}
+
 export default function UserLayout({
   children,
 }: {

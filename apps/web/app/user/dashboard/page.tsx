@@ -20,6 +20,7 @@ import { SpendingTrendCharts } from '../../../components/SpendingTrendCharts'
 import { ExpenseForm } from '../../../components/ExpenseForm'
 import { ExpenseList } from '../../../components/ExpenseList'
 import { useToast } from '../../../hooks/useToast'
+import { ROUTES } from '../../../constants/routes'
 
 const DashboardPage = () => {
   const { signOut, loading } = useContext(AuthContext) as AuthContextType
@@ -107,7 +108,7 @@ const DashboardPage = () => {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-2">
               <CreateReportButton variant="outline" />
-              <a href="/reports">
+              <a href={ROUTES.REPORTS}>
                 <Button variant="ghost" size="sm">
                   <FileText className="h-4 w-4 mr-2" />
                   Reports
