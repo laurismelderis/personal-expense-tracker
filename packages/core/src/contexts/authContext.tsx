@@ -49,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
     })
-    console.log(data)
     if (error) throw error
     setUser(data.user)
     setSession(data.session)

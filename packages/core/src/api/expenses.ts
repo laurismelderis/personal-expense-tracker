@@ -1,6 +1,12 @@
 import { format, subMonths } from 'date-fns'
 import { supabase } from '../lib/supabase'
 import { Category } from './categories'
+import {
+  getStartOfMonth,
+  getStartOfWeek,
+  getThreeMonthsAgo,
+  getToday,
+} from '../utils'
 
 export interface Expense {
   id: string
@@ -17,29 +23,6 @@ export interface ExpensesSummary {
   weekTotal: number
   monthTotal: number
   thisMonthExpensesCount: number
-}
-
-const getToday = () => {
-  const now = new Date()
-
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
-}
-
-const getStartOfWeek = () => {
-  const today = getToday()
-  const startOfWeek = new Date(today)
-  startOfWeek.setDate(today.getDate() - today.getDay())
-
-  return startOfWeek
-}
-
-const getStartOfMonth = () => {
-  const now = new Date()
-  return new Date(now.getFullYear(), now.getMonth(), 1)
-}
-
-const getThreeMonthsAgo = () => {
-  return subMonths(new Date(), 3)
 }
 
 export const fetchExpenses = async ({
@@ -75,6 +58,36 @@ export const fetchExpenses = async ({
     throw new Error(error.message)
   }
   throw new Error('Failed to load expenses')
+}
+
+export const fetchAddExpense = async ({
+  userId,
+  amount,
+  description,
+  categoryId,
+  date,
+  receiptUrl,
+}: {
+  userId: string
+  amount: number
+  description: string
+  categoryId: string
+  date: string
+  receiptUrl?: string
+}) => {
+  const { error } = await supabase.from('expenses').insert({
+    user_id: userId,
+    amount,
+    description,
+    category_id: categoryId,
+    date,
+    receipt_url: receiptUrl,
+  })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+  return
 }
 
 const fetchTodaysExpenses = async ({ userId }: { userId: string }) => {

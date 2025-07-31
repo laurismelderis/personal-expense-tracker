@@ -13,11 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from '../../components/common/Card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { Label } from '../../components/common/Label'
 import { Input } from '../../components/common/Input'
 import { Button } from '../../components/common/Button'
 import { useToast } from '../../hooks/useToast'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '../../components/common/Tabs'
 
 export default function LoginPage() {
   const router = useRouter()

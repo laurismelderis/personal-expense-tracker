@@ -7,7 +7,8 @@ import {
   AuthContext,
   AuthContextType,
   Category,
-  fetchCategories,
+  fetchAddExpense,
+  fetchUploadReceipt,
 } from '@repo/core'
 import { useToast } from '../hooks/useToast'
 import {
@@ -27,8 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './common/Select'
-import { Popover, PopoverTrigger } from './common/Popover'
-import { PopoverContent } from '@radix-ui/react-popover'
+import { Popover, PopoverContent, PopoverTrigger } from './common/Popover'
 import { cn } from '../lib/utils'
 import { Calendar } from './common/Calendar'
 
@@ -90,88 +90,69 @@ export function ExpenseForm({
     setReceiptPreview(null)
   }
 
-  // const uploadReceipt = async (file: File): Promise<string | null> => {
-  //   const fileExt = file.name.split('.').pop()
-  //   const fileName = `${user!.id}/${Date.now()}.${fileExt}`
+  const uploadReceipt = async (file: File): Promise<string> => {
+    try {
+      const fileName = await fetchUploadReceipt({ userId: user!.id, file })
 
-  //   const { error: uploadError } = await supabase.storage
-  //     .from('receipts')
-  //     .upload(fileName, file)
-
-  //   if (uploadError) {
-  //     console.error('Upload error:', uploadError)
-  //     return null
-  //   }
-
-  //   // Return the path for signed URL generation later
-  //   return fileName
-  // }
+      return fileName
+    } catch (e) {
+      throw new Error((e as Error).message)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    //   e.preventDefault()
-    //   if (!user) {
-    //     toast({
-    //       title: 'Error',
-    //       description: 'You must be logged in to add expenses',
-    //       variant: 'destructive',
-    //     })
-    //     return
-    //   }
-    //   if (!formData.amount || !formData.description || !formData.category_id) {
-    //     toast({
-    //       title: 'Error',
-    //       description: 'Please fill in all fields',
-    //       variant: 'destructive',
-    //     })
-    //     return
-    //   }
-    //   setIsLoading(true)
-    //   try {
-    //     let receiptUrl = null
-    //     // Upload receipt if provided
-    //     if (receiptFile) {
-    //       receiptUrl = await uploadReceipt(receiptFile)
-    //       if (!receiptUrl) {
-    //         toast({
-    //           title: 'Error',
-    //           description: 'Failed to upload receipt',
-    //           variant: 'destructive',
-    //         })
-    //         setIsLoading(false)
-    //         return
-    //       }
-    //     }
-    //     const { error } = await supabase.from('expenses').insert({
-    //       user_id: user.id,
-    //       amount: parseFloat(formData.amount),
-    //       description: formData.description,
-    //       category_id: formData.category_id,
-    //       date: format(date, 'yyyy-MM-dd'),
-    //       receipt_url: receiptUrl,
-    //     })
-    //     if (error) {
-    //       throw error
-    //     }
-    //     toast({
-    //       title: 'Success',
-    //       description: 'Expense added successfully',
-    //     })
-    //     // Reset form
-    //     setFormData({ amount: '', description: '', category_id: '' })
-    //     setDate(new Date())
-    //     setReceiptFile(null)
-    //     setReceiptPreview(null)
-    //     onExpenseAdded()
-    //     onClose?.()
-    //   } catch (error) {
-    //     toast({
-    //       title: 'Error',
-    //       description: 'Failed to add expense',
-    //       variant: 'destructive',
-    //     })
-    //   } finally {
-    //     setIsLoading(false)
-    //   }
+    e.preventDefault()
+    if (!user) {
+      toast({
+        title: 'Error',
+        description: 'You must be logged in to add expenses',
+        variant: 'destructive',
+      })
+      return
+    }
+    if (!formData.amount || !formData.description || !formData.category_id) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in all fields',
+        variant: 'destructive',
+      })
+      return
+    }
+    setIsLoading(true)
+    try {
+      let receiptUrl
+      // Upload receipt if provided
+      if (receiptFile) {
+        receiptUrl = await uploadReceipt(receiptFile)
+      }
+      await fetchAddExpense({
+        userId: user.id,
+        amount: parseFloat(formData.amount),
+        description: formData.description,
+        categoryId: formData.category_id,
+        date: format(date, 'yyyy-MM-dd'),
+        receiptUrl,
+      })
+      toast({
+        title: 'Success',
+        description: 'Expense added successfully',
+      })
+      // Reset form
+      setFormData({ amount: '', description: '', category_id: '' })
+      setDate(new Date())
+      setReceiptFile(null)
+      setReceiptPreview(null)
+      onExpenseAdded()
+      onClose?.()
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: (error as Error).message,
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -21,7 +21,6 @@ import {
   format,
   subDays,
   subMonths,
-  startOfWeek,
   endOfWeek,
   startOfMonth,
   endOfMonth,
@@ -29,12 +28,7 @@ import {
   eachWeekOfInterval,
   eachMonthOfInterval,
 } from 'date-fns'
-import {
-  TrendingUp,
-  TrendingDown,
-  Calendar,
-  PieChart as PieChartIcon,
-} from 'lucide-react'
+import { TrendingUp, PieChart as PieChartIcon } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -42,12 +36,12 @@ import {
   CardHeader,
   CardTitle,
 } from './common/Card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import {
   AuthContext,
   AuthContextType,
   fetchExpensesThreeMonthsAgo,
 } from '@repo/core'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './common/Tabs'
 
 interface SpendingData {
   date: string
