@@ -93,8 +93,6 @@ export default function ReportPage() {
       const report = await fetchReport({ userId: user.id, reportId })
       setReportData(report)
 
-      console.log(report)
-
       const expensesData = await fetchExpenses({
         userId: user.id,
         startDate: report.start_date,

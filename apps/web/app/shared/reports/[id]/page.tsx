@@ -31,8 +31,10 @@ import { ReceiptImage } from '../../../../components/ReceiptImage'
 import {
   fetchExpenses,
   fetchSetSharedReportViews,
+  fetchSharedExpenses,
   fetchSharedReport,
 } from '@repo/core'
+import { SharedExpense } from '@repo/core'
 
 interface SharedReportData {
   id: string
@@ -64,7 +66,7 @@ interface Expense {
 export default function SharedReportPage() {
   const { id: hashId } = useParams<{ id: string }>()
   const [reportData, setReportData] = useState<SharedReportData | null>(null)
-  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [expenses, setExpenses] = useState<SharedExpense[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -99,23 +101,17 @@ export default function SharedReportPage() {
         reportId: reportData.id,
       })
 
-      const expensesData = await fetchExpenses({
-        userId: reportData.user_id,
-        startDate: reportData.start_date,
-        endDate: reportData.end_date,
+      const expensesData = await fetchSharedExpenses({
+        reportId: reportData.id,
       })
 
-      // Filter by categories if specified
-      let filteredExpenses = (expensesData || []) as Expense[]
-      if (reportData.category_filter && reportData.category_filter.length > 0) {
-        filteredExpenses = filteredExpenses.filter((expense) => {
-          const categoryName = expense.expense_categories?.name
-          const isIncluded = reportData.category_filter!.includes(categoryName)
-          return isIncluded
-        })
-      }
+      // Convert to the expected format
+      const expenses = (expensesData || []).map((expense: any) => ({
+        ...expense,
+        id: expense.expense_id,
+      }))
 
-      setExpenses(filteredExpenses)
+      setExpenses(expenses)
     } catch (error: any) {
       setError(error.message || 'Failed to load shared report')
     } finally {
@@ -313,9 +309,7 @@ export default function SharedReportPage() {
                     className="flex items-center justify-between p-3 border border-border rounded-lg"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="text-lg">
-                        {expense.expense_categories.icon}
-                      </div>
+                      <div className="text-lg">{expense.category_icon}</div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">
                           {expense.description}

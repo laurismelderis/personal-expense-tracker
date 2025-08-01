@@ -88,7 +88,10 @@ export default function ReportsPage() {
       <header className="border-b border-border bg-background/95 backdrop-blur">
         <div className="container flex h-14 items-center px-4">
           <div className="flex items-center gap-2 flex-1">
-            <a href="/" className="flex items-center gap-2 hover:opacity-80">
+            <a
+              href={ROUTES.DASHBOARD}
+              className="flex items-center gap-2 hover:opacity-80"
+            >
               <DollarSign className="h-6 w-6 text-primary" />
               <h1 className="text-xl font-bold">ExpenseTracker</h1>
             </a>

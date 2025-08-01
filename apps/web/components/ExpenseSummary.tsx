@@ -101,7 +101,7 @@ export function ExpenseSummary({ refreshTrigger }: ExpenseSummaryProps) {
         <CardHeader className="pb-2">
           <CardDescription className="flex items-center gap-1">
             <Target className="h-3 w-3" />
-            Expenses
+            This month expenses
           </CardDescription>
           <CardTitle className="text-2xl font-bold">
             {summary.thisMonthExpensesCount}

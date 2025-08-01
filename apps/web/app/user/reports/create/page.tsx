@@ -8,6 +8,7 @@ import {
   AuthContext,
   AuthContextType,
   fetchAddReport,
+  fetchAddSharedExpenses,
   fetchExpenses,
 } from '@repo/core'
 import { useToast } from '../../../../hooks/useToast'
@@ -32,6 +33,7 @@ import { Calendar } from '../../../../components/common/Calendar'
 import { Textarea } from '../../../../components/common/Textarea'
 import { Checkbox } from '../../../../components/common/Checkbox'
 import { useRouter } from 'next/navigation'
+import { SharedExpense } from '@repo/core'
 
 interface Category {
   id: string
@@ -92,9 +94,6 @@ export default function CreateReport() {
 
       const currentDate = new Date()
 
-      console.log((startDate || currentDate).toISOString())
-      console.log((endDate || currentDate).toISOString())
-
       const theStartDate = format(startDate || currentDate, 'yyyy-MM-dd')
       const theEndDate = format(endDate || currentDate, 'yyyy-MM-dd')
 
@@ -132,6 +131,20 @@ export default function CreateReport() {
         isShared: false,
         isActive: true,
       })
+
+      if (filteredExpenses.length > 0) {
+        const reportExpenses = filteredExpenses.map((expense) => ({
+          report_id: report.id,
+          expense_id: expense.id,
+          amount: expense.amount,
+          description: expense.description,
+          date: expense.date,
+          category_name: expense.expense_categories.name,
+          category_icon: expense.expense_categories.icon,
+          receipt_url: expense.receipt_url,
+        }))
+        await fetchAddSharedExpenses({ reportExpenses })
+      }
 
       toast({
         title: 'Success',

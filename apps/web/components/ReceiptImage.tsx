@@ -33,8 +33,6 @@ export function ReceiptImage({
       }
     }
 
-    console.log({ receiptPath })
-
     if (receiptPath) {
       loadSignedUrl()
     }

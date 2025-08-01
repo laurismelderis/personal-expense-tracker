@@ -1,4 +1,4 @@
-import { format, subMonths } from 'date-fns'
+import { addDays, format } from 'date-fns'
 import { supabase } from '../lib/supabase'
 import { Category } from './categories'
 import {
@@ -114,13 +114,10 @@ const fetchTodaysExpenses = async ({ userId }: { userId: string }) => {
 
   const { data, error } = await supabase
     .from('expenses')
-    .select('amount')
+    .select('amount, description')
     .eq('user_id', userId)
-    .gte('created_at', today.toISOString())
-    .lt(
-      'created_at',
-      new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString()
-    )
+    .gt('date', today.toISOString())
+    .lte('date', addDays(today, 1).toISOString())
 
   if (data && !error) {
     return data
@@ -136,7 +133,7 @@ const fetchWeeksExpenses = async ({ userId }: { userId: string }) => {
     .from('expenses')
     .select('amount')
     .eq('user_id', userId)
-    .gte('created_at', startOfWeek.toISOString())
+    .gt('date', startOfWeek.toISOString())
 
   if (data && !error) {
     return data
@@ -153,7 +150,7 @@ const fetchMonthsExpenses = async ({ userId }: { userId: string }) => {
     .from('expenses')
     .select('amount')
     .eq('user_id', userId)
-    .gte('created_at', startOfMonth.toISOString())
+    .gt('date', startOfMonth.toISOString())
 
   if (data && !error) {
     return data
@@ -170,9 +167,9 @@ const fetchMonthsExpensesCount = async ({ userId }: { userId: string }) => {
     .from('expenses')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
-    .gte('created_at', startOfMonth.toISOString())
+    .gt('date', startOfMonth.toISOString())
 
-  if (data && !error) {
+  if (data !== null && !error) {
     return data
   } else if (error) {
     throw new Error(error.message)

@@ -1,4 +1,4 @@
-import { subMonths } from 'date-fns'
+import { addDays, subMonths } from 'date-fns'
 
 export const getToday = () => {
   const now = new Date()
@@ -9,9 +9,8 @@ export const getToday = () => {
 export const getStartOfWeek = () => {
   const today = getToday()
   const startOfWeek = new Date(today)
-  startOfWeek.setDate(today.getDate() - today.getDay())
 
-  return startOfWeek
+  return addDays(startOfWeek.setDate(today.getDate() - today.getDay()), 1)
 }
 
 export const getStartOfMonth = () => {
