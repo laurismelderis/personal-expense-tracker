@@ -26,17 +26,13 @@ import {
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('lauris.melderis77@gmail.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState<string>('')
   const { toast } = useToast()
   const { signIn, signUp, user, loading } = useContext(
     AuthContext
   ) as AuthContextType
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target?.value)
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target?.value)
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
@@ -77,7 +73,7 @@ export default function LoginPage() {
   }, [user])
 
   return (
-    <div className="min-h-screen bg-background flex flex-col ">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="p-4 border-b border-border">
         <div className="flex items-center gap-2">
@@ -87,25 +83,31 @@ export default function LoginPage() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md space-y-6">
+      <div className="flex-1 flex items-center justify-center p-2 sm:p-4">
+        <div className="w-full max-w-sm sm:max-w-md space-y-4 sm:space-y-6">
           {/* Feature highlights */}
-          <div className="text-center space-y-4">
-            <h2 className="text-2xl font-bold">
+          <div className="text-center space-y-3 sm:space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold">
               Take Control of Your Finances
             </h2>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="space-y-2">
-                <TrendingUp className="h-8 w-8 mx-auto text-primary" />
-                <p className="text-sm text-muted-foreground">Track Expenses</p>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+              <div className="space-y-1 sm:space-y-2">
+                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-primary" />
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Track Expenses
+                </p>
               </div>
-              <div className="space-y-2">
-                <PieChart className="h-8 w-8 mx-auto text-primary" />
-                <p className="text-sm text-muted-foreground">View Analytics</p>
+              <div className="space-y-1 sm:space-y-2">
+                <PieChart className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-primary" />
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  View Analytics
+                </p>
               </div>
-              <div className="space-y-2">
-                <DollarSign className="h-8 w-8 mx-auto text-primary" />
-                <p className="text-sm text-muted-foreground">Save Money</p>
+              <div className="space-y-1 sm:space-y-2">
+                <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-primary" />
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Save Money
+                </p>
               </div>
             </div>
           </div>
@@ -132,7 +134,7 @@ export default function LoginPage() {
                         id="signin-email"
                         type="email"
                         value={email}
-                        onChange={handleEmailChange}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="your@email.com"
                         disabled={loading}
                       />
@@ -143,7 +145,7 @@ export default function LoginPage() {
                         id="signin-password"
                         type="password"
                         value={password}
-                        onChange={handlePasswordChange}
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         disabled={loading}
                       />

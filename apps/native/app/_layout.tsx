@@ -1,7 +1,18 @@
-import { Stack } from "expo-router"
+import { AuthProvider } from '@repo/core'
+import { Stack } from 'expo-router'
 
 const AppLayout = () => {
-  return <Stack />
+  return (
+    <AuthProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="index" />
+      </Stack>
+    </AuthProvider>
+  )
 }
 
 export default AppLayout
