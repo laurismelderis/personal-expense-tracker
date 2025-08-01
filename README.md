@@ -30,3 +30,14 @@ This Turborepo has some additional tools already setup for you:
 - [Expo](https://docs.expo.dev/) for native development
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [Prettier](https://prettier.io) for code formatting
+
+## Running the monorepo
+
+1. Run `npm install`
+2. In `apps/web` and `apps/native` you can find files `.env.local.example`. Make sure to create copy **in both** directories from the file with name `.env.local`. Fill in the necessary environment variables
+3. Run the application with `npm start`, where on `http://localhost:3000` you will find Next application and on `http://localhost:8081` you will find React Native application in web mode.
+
+## Building the monorepo
+
+1. Repeat the first two steps from **Running the monorepo**
+2. Build the application with `npm run build`
